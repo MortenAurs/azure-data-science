@@ -8,10 +8,9 @@ on:
       - main
 
 jobs:
-  build:
+  changed-config:
     runs-on: ubuntu-latest
     name: Get changed terraform files
-    id: changed-config
     outputs:
       changed-config: ${{ steps.changed-files-directory.outputs.all_changed_files }}
     steps:
