@@ -15,6 +15,9 @@ provider "azurerm" {
 
 data "azurerm_client_config" "current" {}
 
+#######################
+## R E S O U R C E S ##
+#######################
 resource "azurerm_resource_group" "this" {
   name     = var.resource_group_name
   location = var.location
