@@ -26,6 +26,9 @@ jobs:
           dir_names: "true"
           files: | 
             terraform
+
+      - id: set-matrix
+        run: echo "changed_configs={\"container\":${{ steps.changed-files-directory.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
           
       - name: List all changed files
         run: |
@@ -33,7 +36,7 @@ jobs:
             echo "$file was changed"
           done
           echo "Then show directory:"
-          echo ${{ steps.changed-files-directory.outputs.changed-files-dir-names }}
+          echo ${{ steps.changed-files-directory.outputs.all_changed_files }}
       
   matrix:
     name: Run Terraform deployment job
