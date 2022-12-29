@@ -39,7 +39,3 @@ jobs:
     strategy:
       matrix: ${{ fromJSON(needs.changed-config.outputs.changed-configs) }}
       fail-fast: false
-
-
-
-
