@@ -19,7 +19,7 @@ jobs:
 
       - name: Get changed files directory
         id: changed-files-directory
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v28
         with:
           dir_names: "true"
 
