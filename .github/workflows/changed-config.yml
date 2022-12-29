@@ -43,7 +43,7 @@ jobs:
     needs: [changed-config]
     uses: ./.github/workflows/terraform.yml
     with:
-      config_path: ${{ strategy.matrix }}
+      config-path: ${{ strategy.matrix }}
     strategy:
       matrix: ${{ fromJSON(needs.changed-config.outputs.changed-configs) }}
       fail-fast: false
