@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Get changed terraform files
     outputs:
-      changed-configs: ${{ steps.changed-files-directory.outputs.all_changed_files }}
+      changed-configs: ${{ steps.set-matrix.outputs.all_changed_files }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -37,9 +37,7 @@ jobs:
           done
           echo "Then show directory:"
           echo ${{ steps.changed-files-directory.outputs.all_changed_files }}
-          echor "Then show json output:"
-          echo "changed_configs={\"container\":${{ steps.changed-files-directory.outputs.all_changed_files }}}"
-      
+
   matrix:
     name: Run Terraform deployment job
     runs-on: ubuntu-latest
