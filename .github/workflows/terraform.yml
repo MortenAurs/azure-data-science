@@ -10,11 +10,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Get changed terraform files
-    outputs:
-      changed-config: ${{ steps.changed-files-directory.outputs.all_changed_files }}
+    name: Deploy with Terraform
     steps:
       - uses: actions/checkout@v3
+      
       - name: List all changed files
         run: |
           echo ${{ inputs.config-path }}
