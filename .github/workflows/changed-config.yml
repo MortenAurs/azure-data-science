@@ -10,7 +10,7 @@ on:
 jobs:
   changed-config:
     runs-on: ubuntu-latest
-    name: Get changed terraform files
+    name: Get changed tf directories
     outputs:
       changed-configs: ${{ steps.set-matrix.outputs.changed_configs}}
     steps:
