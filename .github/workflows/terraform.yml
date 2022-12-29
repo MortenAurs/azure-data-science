@@ -1,0 +1,33 @@
+name: Check if files changed
+
+on:
+  # Compare the last commit of main -> to the current commit of a PR branch. 
+  # (Note: To compare changes between the last pushed commit to the remote PR branch set `since_last_remote_commit: true`)
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Test changed-files
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  
+
+      - name: Get changed files directory
+        id: changed-files-directory
+        uses: tj-actions/changed-files@v35
+        with:
+          files: | 
+            terraform/**.tf
+
+      - name: List all changed files
+        run: |
+          for file in ${{ steps.changed-files-directory.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
+          echo "Then show directory:"
+          echo ${{ steps.changed-files-directory.outputs.all_changed_files }}
