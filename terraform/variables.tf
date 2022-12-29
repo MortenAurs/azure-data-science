@@ -17,6 +17,10 @@ variable "storage_account_name" {
   default = "stdsaml"
 }
 
+variable "container_registry_name" {
+  default = "acrdsdp100"
+}
+
 variable "machine_learning_workspace_name" {
   default = "mlw-data-science"
 }
