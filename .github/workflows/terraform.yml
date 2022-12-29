@@ -21,6 +21,8 @@ jobs:
         id: changed-files-directory
         uses: tj-actions/changed-files@v28
         with:
+          files: | 
+            terraform/**.tf
           dir_names: "true"
 
       - name: List all changed files
