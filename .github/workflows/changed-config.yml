@@ -44,6 +44,6 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: terraform.yml
+        uses: .gihub/workflows/terraform.yml
         with:
           config_path: ${{ strategy.matrix }}
