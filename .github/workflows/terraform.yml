@@ -15,33 +15,8 @@ jobs:
     outputs:
       changed-config: ${{ steps.changed-files-directory.outputs.all_changed_files }}
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  
-
-      - name: Get changed files directory
-        id: changed-files-directory
-        uses: tj-actions/changed-files@v34
-        with:
-          files: | 
-            terraform
-          dir_names: "true"
-
       - name: List all changed files
         run: |
-          for file in ${{ steps.changed-files-directory.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
-          echo "Then show directory:"
-          echo ${{ steps.changed-files-directory.outputs.changed-files-dir-names }}
+          
+          echo ${{ inputs.config-path }}
       
-  matrix:
-    name: Run Matrix Job
-        runs-on: ubuntu-latest
-        needs: [changed-files-directory]
-        strategy:
-          matrix: ${{ fromJSON(needs.changed-files-directory.outputs.changed-config) }}
-          fail-fast: false
-        steps:
-          - name: Checkout
-            uses: 
