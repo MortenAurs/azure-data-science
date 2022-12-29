@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Get changed terraform files
     outputs:
-      changed-config: ${{ steps.changed-files-directory.outputs.all_changed_files }}
+      changed-configs: ${{ steps.changed-files-directory.outputs.all_changed_files }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -36,11 +36,11 @@ jobs:
           echo ${{ steps.changed-files-directory.outputs.changed-files-dir-names }}
       
   matrix:
-    name: Run Matrix Job
+    name: Run Terraform deployment job
     runs-on: ubuntu-latest
     needs: [changed-config]
     strategy:
-      matrix: ${{ fromJSON(needs.changed-files-directory.outputs.changed-config) }}
+      matrix: ${{ fromJSON(needs.changed-config.outputs.changed-configs) }}
       fail-fast: false
     steps:
       - name: Checkout
