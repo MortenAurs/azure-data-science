@@ -11,7 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Test changed-files
+    name: Get changed terraform files
     steps:
       - uses: actions/checkout@v3
         with:
@@ -30,4 +30,4 @@ jobs:
             echo "$file was changed"
           done
           echo "Then show directory:"
-          echo ${{ steps.changed-files-directory.outputs.all_changed_files }}
+          echo ${{ steps.changed-files-directory.outputs.changed-files-dir-names }}
