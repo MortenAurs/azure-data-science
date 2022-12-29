@@ -6,6 +6,9 @@ on:
       config-path:
         required: true
         type: string
+defaults:
+  run:
+    working-directory: ${{ inputs.config-path }}
 
 jobs:
   build:
@@ -17,4 +20,5 @@ jobs:
       - name: List all changed files
         run: |
           echo ${{ inputs.config-path }}
+          pwd
       
