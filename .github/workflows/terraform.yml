@@ -34,11 +34,6 @@ jobs:
           client-id: ${{ env.ARM_CLIENT_ID }}
           tenant-id: ${{ env.ARM_TENANT_ID }}
           subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
-  
-      - name: 'Run az commands'
-        run: |
-          az account show
-          az group list
 
       - uses: hashicorp/setup-terraform@v2
         with:
