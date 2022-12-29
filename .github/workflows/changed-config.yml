@@ -28,7 +28,7 @@ jobs:
             terraform
 
       - id: set-matrix
-        run: echo "changed_configs={\"container\":${{ steps.changed-files-directory.outputs.all_changed_files }}}" >> "$GITHUB_OUTPUT"
+        run: echo "changed_configs={\"container\":${{ steps.changed-files-directory.outputs.all_changed_files }}}" >> $GITHUB_OUTPUT
           
       - name: List all changed files
         run: |
