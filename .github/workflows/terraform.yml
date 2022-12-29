@@ -12,6 +12,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Get changed terraform files
+    outputs: 
+      changed-config: ${{ steps.changed-files-directory.outputs.changed-files-dir-names }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -21,7 +23,7 @@ jobs:
         id: changed-files-directory
         uses: tj-actions/changed-files@v35
         with:
-          dir_names: true
+          dir_names: "true"
           files: | 
             terraform/**.tf
 
