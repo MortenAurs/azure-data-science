@@ -14,8 +14,8 @@ jobs:
     outputs:
       changed-config: ${{ steps.changed-files-directory.outputs.all_changed_files }}
     steps:
+      - uses: actions/checkout@v3
       - name: List all changed files
         run: |
-          
           echo ${{ inputs.config-path }}
       
