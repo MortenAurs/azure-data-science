@@ -42,10 +42,11 @@ jobs:
     name: Run Terraform deployment job
     needs: [changed-config]
     uses: ./.github/workflows/terraform.yml
-    with:
-      config_path: ${{ strategy.matrix }}
     strategy:
       matrix: ${{ fromJSON(needs.changed-config.outputs.changed-configs) }}
       fail-fast: false
+    with:
+      config_path: ${{ strategy.matrix }}
+
 
 
