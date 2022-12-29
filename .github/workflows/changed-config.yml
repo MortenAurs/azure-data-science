@@ -36,6 +36,7 @@ jobs:
     uses: ./.github/workflows/terraform.yml
     with:
       config-path: ${{ matrix.dir }}
+    secrets: inherit
     strategy:
       matrix: ${{ fromJSON(needs.changed-config.outputs.changed-configs) }}
       fail-fast: false
