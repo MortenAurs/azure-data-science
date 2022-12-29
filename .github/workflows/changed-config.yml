@@ -28,7 +28,7 @@ jobs:
             terraform
 
       - id: set-matrix
-        run: echo "changed_configs={\"container\":${{ steps.changed-files-directory.outputs.all_changed_files }}}" >> $GITHUB_OUTPUT
+        run: echo "changed_configs={\"dir\":${{ steps.changed-files-directory.outputs.all_changed_files }}}" >> $GITHUB_OUTPUT
           
       - name: List all changed files
         run: |
@@ -43,7 +43,7 @@ jobs:
     needs: [changed-config]
     uses: ./.github/workflows/terraform.yml
     with:
-      config-path: ${{ strategy.matrix }}
+      config-path: ${{ matrix.dir }}
     strategy:
       matrix: ${{ fromJSON(needs.changed-config.outputs.changed-configs) }}
       fail-fast: false
