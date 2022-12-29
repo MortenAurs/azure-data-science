@@ -41,11 +41,12 @@ jobs:
   matrix:
     name: Run Terraform deployment job
     runs-on: ubuntu-latest
+    uses: ./.github/workflows/terraform.yml
+    with:
+      config_path: ${{ strategy.matrix }}
     needs: [changed-config]
     strategy:
       matrix: ${{ fromJSON(needs.changed-config.outputs.changed-configs) }}
       fail-fast: false
-    uses: ./.github/workflows/terraform.yml
-    with:
-      config_path: ${{ strategy.matrix }}
+
 
