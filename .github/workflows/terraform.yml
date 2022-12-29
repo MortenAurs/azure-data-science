@@ -23,6 +23,7 @@ jobs:
         with:
           files: | 
             terraform/**.tf
+          dir_names: "true"
 
       - name: List all changed files
         run: |
