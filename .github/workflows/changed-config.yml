@@ -10,7 +10,7 @@ on:
 jobs:
   changed-config:
     runs-on: ubuntu-latest
-    name: Get changed tf directories
+    name: Get modified tf directories
     outputs:
       changed-configs: ${{ steps.set-matrix.outputs.changed_configs}}
     steps:
