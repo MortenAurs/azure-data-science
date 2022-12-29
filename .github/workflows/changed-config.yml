@@ -19,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0  
 
-      - name: Get changed tf config
+      - name: Get modified tf config
         id: changed-files-directory
         uses: tj-actions/changed-files@v34
         with:
