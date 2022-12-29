@@ -25,7 +25,7 @@ jobs:
       run:
         working-directory: ${{ inputs.config-path }}
     steps:
-      - name: Checout source code
+      - name: Checkout source code
         uses: actions/checkout@v3
       
       - name: Azure login
