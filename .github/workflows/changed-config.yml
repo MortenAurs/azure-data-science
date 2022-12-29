@@ -11,6 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Get changed terraform files
+    id: changed-config
     outputs:
       changed-config: ${{ steps.changed-files-directory.outputs.all_changed_files }}
     steps:
@@ -38,7 +39,7 @@ jobs:
   matrix:
     name: Run Matrix Job
     runs-on: ubuntu-latest
-    needs: [changed-files-directory]
+    needs: [changed-config]
     strategy:
       matrix: ${{ fromJSON(needs.changed-files-directory.outputs.changed-config) }}
       fail-fast: false
