@@ -6,14 +6,14 @@ on:
       config-path:
         required: true
         type: string
-defaults:
-  run:
-    working-directory: ${{ inputs.config-path }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     name: Deploy with Terraform
+    defaults:
+      run:
+        working-directory: ${{ inputs.config-path }}
     steps:
       - uses: actions/checkout@v3
       
