@@ -22,7 +22,7 @@ jobs:
         uses: tj-actions/changed-files@v33
         with:
           files: | 
-            terraform/**.tf
+            terraform
           dir_names: "true"
 
       - name: List all changed files
