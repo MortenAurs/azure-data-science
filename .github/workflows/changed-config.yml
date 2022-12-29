@@ -14,11 +14,12 @@ jobs:
     outputs:
       changed-configs: ${{ steps.set-matrix.outputs.changed_configs}}
     steps:
-      - uses: actions/checkout@v3
+      - name: Checoute source code
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0  
 
-      - name: Get changed files directory
+      - name: Get changed tf config
         id: changed-files-directory
         uses: tj-actions/changed-files@v34
         with:
