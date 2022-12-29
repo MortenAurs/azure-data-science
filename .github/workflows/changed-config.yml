@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Get changed terraform files
     outputs:
-      changed-configs: ${{ steps.set-matrix.outputs.all_changed_files }}
+      changed-configs: ${{ steps.set-matrix.outputs.changed_configs}}
     steps:
       - uses: actions/checkout@v3
         with:
