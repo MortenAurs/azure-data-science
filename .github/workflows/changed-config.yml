@@ -1,12 +1,11 @@
-name: Deploy with Terraform
+name: Get changed tf config
 
 on:
-  workflow_call:
-    inputs:
-      config-path:
-        required: true
-        type: string
-
+  # Compare the last commit of main -> to the current commit of a PR branch. 
+  # (Note: To compare changes between the last pushed commit to the remote PR branch set `since_last_remote_commit: true`)
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -23,10 +22,11 @@ jobs:
         id: changed-files-directory
         uses: tj-actions/changed-files@v34
         with:
+          json: "true"
+          dir_names: "true"
           files: | 
             terraform
-          dir_names: "true"
-
+          
       - name: List all changed files
         run: |
           for file in ${{ steps.changed-files-directory.outputs.all_changed_files }}; do
@@ -44,4 +44,6 @@ jobs:
           fail-fast: false
         steps:
           - name: Checkout
-            uses: 
+            uses: terraform.yml
+            with:
+              config_path: ${{ strategy.matrix }}
