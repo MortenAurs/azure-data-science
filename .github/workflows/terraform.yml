@@ -59,11 +59,15 @@ jobs:
 
       - name: Terraform Validate
         id: validate
-        run: terraform validate -no-color
+        run: |
+          pwd
+          terraform validate -no-color
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
+        run: |
+          pwd
+          terraform plan -no-color
         continue-on-error: true
       
       - uses: actions/github-script@v6
