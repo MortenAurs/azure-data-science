@@ -37,6 +37,8 @@ jobs:
           done
           echo "Then show directory:"
           echo ${{ steps.changed-files-directory.outputs.all_changed_files }}
+          echor "Then show json output:"
+          echo "changed_configs={\"container\":${{ steps.changed-files-directory.outputs.all_changed_files }}}"
       
   matrix:
     name: Run Terraform deployment job
