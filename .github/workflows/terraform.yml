@@ -67,6 +67,10 @@ jobs:
           terraform plan -no-color -out=tfplan
         continue-on-error: true
 
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: terraform
+
       - name: Upload Terraform Plan to Artifact 
         uses: actions/upload-artifact@v3
         with:
@@ -127,6 +131,10 @@ jobs:
         with:
           name: terraform-config
           path: terraform
+      
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: terraform
       
       - name: Terraform Apply
         id: apply
