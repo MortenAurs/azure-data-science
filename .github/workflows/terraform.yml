@@ -66,7 +66,7 @@ jobs:
         id: plan
         run: |
           pwd
-          terraform plan -no-color -out=tfplan
+          terraform plan -out=tfplan
         continue-on-error: true
       
       - name: Add summary to pull request
@@ -94,7 +94,7 @@ jobs:
             ${process.env.PLAN}
             \`\`\`
 
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ inputs.config-path }}\`, Workflow: \`${{ github.workflow }}\`*`;
               github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
