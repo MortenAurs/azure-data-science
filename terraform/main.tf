@@ -203,7 +203,7 @@ resource "azurerm_consumption_budget_resource_group" "this" {
   name              = "resourceGroup forecast"
   resource_group_id = azurerm_resource_group.this.id
 
-  amount     = 200
+  amount     = 100
   time_grain = "Monthly"
 
   time_period {
