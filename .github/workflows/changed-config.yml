@@ -20,7 +20,7 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  
+          fetch-depth: 0
 
       - name: Get modified tf directories
         id: changed-files-directory
@@ -31,12 +31,15 @@ jobs:
           files: | 
             terraform
 
-      - id: set-matrix
+      - name: Set Matrix
+        if: steps.changed-files-directory.outputs.any_changed == 'true'
+        id: set-matrix
         run: echo "changed_configs={\"dir\":${{ steps.changed-files-directory.outputs.all_changed_files }}}" >> $GITHUB_OUTPUT
 
   matrix:
     name: Run Terraform deployment job
     needs: [changed-config]
+    if: needs.changed-config.outputs.changed-configs
     uses: ./.github/workflows/terraform.yml
     with:
       config-path: ${{ matrix.dir }}
