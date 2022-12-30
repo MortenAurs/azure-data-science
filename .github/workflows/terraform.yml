@@ -76,10 +76,11 @@ jobs:
           terraform plan -no-color -out=tfplan
         continue-on-error: true
 
-      - uses: actions/upload-artifact@v3
-      with:
-        name: terraform-plan
-        path: tfplan
+      - name: Upload Terraform Plan to Artifact 
+        uses: actions/upload-artifact@v3
+        with:
+          name: terraform-plan
+          path: tfplan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
