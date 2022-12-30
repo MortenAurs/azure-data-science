@@ -136,7 +136,7 @@ jobs:
         id: init
         run: |
           pwd
-          terraform init
+          terraform init -upgrade
       
       - name: Display structure of downloaded files
         run: ls -R
