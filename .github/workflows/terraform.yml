@@ -119,12 +119,6 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: terraform-plan
-
-      - name: Show plan
-        id: show
-        run: |
-          pwd
-          terraform show ../tfplan
       
       - name: Terraform Apply
         id: apply
