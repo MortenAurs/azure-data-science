@@ -125,7 +125,7 @@ jobs:
         id: apply
         run: |
           pwd
-          terraform apply -input=false ../tfplan
+          terraform apply -input=false tfplan
         continue-on-error: true
 
       - name: Add summary to pull request
