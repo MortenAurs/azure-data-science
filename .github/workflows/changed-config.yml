@@ -31,12 +31,14 @@ jobs:
           files: | 
             terraform
 
-      - id: set-matrix
+      - name: Set Matrix
+        id: set-matrix
         run: echo "changed_configs={\"dir\":${{ steps.changed-files-directory.outputs.all_changed_files }}}" >> $GITHUB_OUTPUT
 
   matrix:
     name: Run Terraform deployment job
     needs: [changed-config]
+    if: ${{ fromJSON(needs.changed-config.outputs.changed-configs.dir) }} != ""
     uses: ./.github/workflows/terraform.yml
     with:
       config-path: ${{ matrix.dir }}
