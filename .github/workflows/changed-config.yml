@@ -32,7 +32,7 @@ jobs:
             terraform
 
       - name: Set Matrix
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        if: steps.changed-files-director.outputs.any_changed == 'true'
         id: set-matrix
         run: echo "changed_configs={\"dir\":${{ steps.changed-files-directory.outputs.all_changed_files }}}" >> $GITHUB_OUTPUT
 
