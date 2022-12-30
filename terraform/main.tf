@@ -6,8 +6,13 @@ terraform {
       version = "~> 3.37.0"
     }
   }
-
   required_version = ">= 1.1.0"
+  backend "azurerm" {
+    resource_group_name  = "rg-tf"
+    storage_account_name = "sttfdp100"
+    container_name       = "tfstate"
+    key                  = "terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
@@ -16,6 +21,9 @@ provider "azurerm" {
 
 data "azurerm_client_config" "current" {}
 
+#######################
+## R E S O U R C E S ##
+#######################
 resource "azurerm_resource_group" "this" {
   name     = var.resource_group_name
   location = var.location
@@ -33,7 +41,7 @@ resource "azurerm_subnet" "aml" {
   resource_group_name  = azurerm_resource_group.this.name
   virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = ["10.10.0.0/24"]
-  service_endpoints    = [ "Microsoft.Storage", "Microsoft.ContainerRegistry" ]
+  service_endpoints    = ["Microsoft.Storage", "Microsoft.ContainerRegistry"]
 }
 
 resource "azurerm_application_insights" "this" {
@@ -71,11 +79,11 @@ resource "azurerm_container_registry" "this" {
   admin_enabled       = false
 
   network_rule_set {
-      default_action = "Deny"
-      virtual_network {
-        action = "Allow"
-        subnet_id = azurerm_subnet.aml.id
-      } 
+    default_action = "Deny"
+    virtual_network {
+      action    = "Allow"
+      subnet_id = azurerm_subnet.aml.id
+    }
   }
 }
 
@@ -116,7 +124,7 @@ resource "azurerm_private_endpoint" "acr" {
     name                           = "psc-${var.container_registry_name}"
     private_connection_resource_id = azurerm_container_registry.this.id
     is_manual_connection           = false
-    subresource_names              = ["registry"] 
+    subresource_names              = ["registry"]
   }
 }
 
@@ -130,7 +138,7 @@ resource "azurerm_private_endpoint" "blob" {
     name                           = "psc-${var.storage_account_name}-blob"
     private_connection_resource_id = azurerm_storage_account.this.id
     is_manual_connection           = false
-    subresource_names              = ["blob"] 
+    subresource_names              = ["blob"]
   }
 }
 
@@ -144,7 +152,7 @@ resource "azurerm_private_endpoint" "file" {
     name                           = "psc-${var.storage_account_name}-file"
     private_connection_resource_id = azurerm_storage_account.this.id
     is_manual_connection           = false
-    subresource_names              = ["file"] 
+    subresource_names              = ["file"]
   }
 }
 
@@ -158,7 +166,7 @@ resource "azurerm_private_endpoint" "table" {
     name                           = "psc-${var.storage_account_name}-table"
     private_connection_resource_id = azurerm_storage_account.this.id
     is_manual_connection           = false
-    subresource_names              = ["table"] 
+    subresource_names              = ["table"]
   }
 }
 
@@ -172,7 +180,7 @@ resource "azurerm_private_endpoint" "amlw" {
     name                           = "psc-${var.machine_learning_workspace_name}"
     private_connection_resource_id = azurerm_machine_learning_workspace.this.id
     is_manual_connection           = false
-    subresource_names              = ["amlworkspace"] 
+    subresource_names              = ["amlworkspace"]
   }
 }
 

@@ -1,0 +1,43 @@
+name: Get changed tf config
+
+on:
+  # Compare the last commit of main -> to the current commit of a PR branch. 
+  # (Note: To compare changes between the last pushed commit to the remote PR branch set `since_last_remote_commit: true`)
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  changed-config:
+    runs-on: ubuntu-latest
+    name: Get modified tf directories
+    outputs:
+      changed-configs: ${{ steps.set-matrix.outputs.changed_configs}}
+    steps:
+      - name: Checoute source code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  
+
+      - name: Get modified tf config
+        id: changed-files-directory
+        uses: tj-actions/changed-files@v34
+        with:
+          json: "true"
+          dir_names: "true"
+          files: | 
+            terraform
+
+      - id: set-matrix
+        run: echo "changed_configs={\"dir\":${{ steps.changed-files-directory.outputs.all_changed_files }}}" >> $GITHUB_OUTPUT
+
+  matrix:
+    name: Run Terraform deployment job
+    needs: [changed-config]
+    uses: ./.github/workflows/terraform.yml
+    with:
+      config-path: ${{ matrix.dir }}
+    secrets: inherit
+    strategy:
+      matrix: ${{ fromJSON(needs.changed-config.outputs.changed-configs) }}
+      fail-fast: false
