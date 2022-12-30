@@ -124,13 +124,13 @@ jobs:
         id: show
         run: |
           pwd
-          terraform show tfplan
+          terraform show ../tfplan
       
       - name: Terraform Apply
         id: apply
         run: |
           pwd
-          terraform apply -input=false tfplan
+          terraform apply -input=false ../tfplan
         continue-on-error: true
 
       - name: Add summary to pull request
