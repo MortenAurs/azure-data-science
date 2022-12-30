@@ -132,6 +132,12 @@ jobs:
           name: terraform-config
           path: terraform
       
+      - name: Terraform Init
+        id: init
+        run: |
+          pwd
+          terraform init
+      
       - name: Display structure of downloaded files
         run: ls -R
         working-directory: terraform
