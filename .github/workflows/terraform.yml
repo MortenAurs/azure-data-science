@@ -36,9 +36,18 @@ jobs:
           tenant-id: ${{ env.ARM_TENANT_ID }}
           subscription-id: ${{ env.ARM_SUBSCRIPTION_ID }}
 
-      - uses: hashicorp/setup-terraform@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.3.6
+
+      - name: Download artifact if exist
+        uses: actions/download-artifact@v3
+        with:
+          name: terraform-plan
+          
+      - name: Display structure of downloaded files
+        run: ls -R
 
       - name: Terraform fmt
         id: fmt
@@ -60,10 +69,24 @@ jobs:
           terraform validate -no-color
 
       - name: Terraform Plan
+
         id: plan
         run: |
           pwd
-          terraform plan -no-color
+          terraform plan -no-color -out=tfplan
+        continue-on-error: true
+
+      - uses: actions/upload-artifact@v3
+      with:
+        name: terraform-plan
+        path: tfplan
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        id: apply
+        run: |
+          pwd
+          terraform apply -input=false
         continue-on-error: true
       
       - name: Add summary to pull request
