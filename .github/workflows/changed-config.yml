@@ -39,7 +39,7 @@ jobs:
   matrix:
     name: Run Terraform deployment job
     needs: [changed-config]
-    if: ${{ needs.changed-config.outputs.changed-configs }} != ""
+    if: ${{ needs.changed-config.outputs.changed-configs != "" }} 
     uses: ./.github/workflows/terraform.yml
     with:
       config-path: ${{ matrix.dir }}
