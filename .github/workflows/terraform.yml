@@ -18,10 +18,10 @@ permissions:
       contents: read
 
 jobs:
-  build:
+  terraform-plan:
     runs-on: ubuntu-latest
     environment: development
-    name: Deploy with Terraform
+    name: Create a Terraform plan
     defaults:
       run:
         working-directory: ${{ inputs.config-path }}
@@ -67,11 +67,6 @@ jobs:
           terraform plan -no-color -out=../tfplan
         continue-on-error: true
 
-      - name: Display structure of downloaded files
-        run: |
-          pwd
-          ls -R
-
       - name: Upload Terraform Plan to Artifact 
         uses: actions/upload-artifact@v3
         with:
@@ -102,6 +97,55 @@ jobs:
 
             \`\`\`\n
             ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+  
+  terraform-apply:
+    runs-on: ubuntu-latest
+    needs: terraform-plan
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: development
+    name: Deploy resources with Terraform
+    defaults:
+      run:
+        working-directory: ${{ inputs.config-path }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3v
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: terraform-plan
+
+      - name: Show plan
+        id: show
+        run: |
+          pwd
+          terraform show tfplan
+      
+      - name: Terraform Apply
+        id: apply
+        run: |
+          pwd
+          terraform apply -input=false tfplan
+        continue-on-error: true
+
+      - name: Add summary to pull request
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        env:
+          APPLY: "terraform\n${{ steps.apply.outputs.stdout }}"
+        with:
+          script: |
+            const output = #### Terraform Apply 📖\`${{ steps.apply.outcome }}\`
+
+            <details><summary>Show Apply Summary</summary>
+
+            \`\`\`\n
+            ${process.env.APPLY}
             \`\`\`
 
             </details>
