@@ -64,7 +64,7 @@ jobs:
         id: plan
         run: |
           pwd
-          terraform plan -no-color -out=tfplan
+          terraform plan -no-color -out=../tfplan
         continue-on-error: true
 
       - name: Display structure of downloaded files
