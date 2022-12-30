@@ -67,6 +67,11 @@ jobs:
           terraform plan -no-color -out=tfplan
         continue-on-error: true
 
+      - name: Display structure of downloaded files
+        run: |
+          pwd
+          ls -R
+
       - name: Upload Terraform Plan to Artifact 
         uses: actions/upload-artifact@v3
         with:
