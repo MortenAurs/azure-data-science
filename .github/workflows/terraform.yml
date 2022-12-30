@@ -70,8 +70,8 @@ jobs:
       - name: Upload Terraform Plan to Artifact 
         uses: actions/upload-artifact@v3
         with:
-          name: terraform-plan
-          path: tfplan
+          name: terraform-config
+          path: terraform/
       
       - name: Add summary to pull request
         uses: actions/github-script@v6
@@ -118,7 +118,8 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: terraform-plan
+          name: terraform-config
+          path: terraform
       
       - name: Terraform Apply
         id: apply
