@@ -128,7 +128,10 @@ resource "azurerm_machine_learning_compute_instance" "example" {
   description                   = "Azure ML to test while doing the AZ Data Science certification"
   identity {
     type = "SystemAssigned"
-
+  }
+  assign_to_user {
+    object_id = "4afbe840-6f29-4b44-ae68-f49c2eb6af62"
+    tenant_id = "8f81da33-edad-4282-a064-189a62bcaf2b"
   }
 }
 
