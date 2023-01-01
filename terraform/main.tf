@@ -84,7 +84,7 @@ resource "azurerm_storage_account" "data_lake" {
   }
 }
 
-resource "azurerm_storage_data_lake_gen2_filesystem" "example" {
+resource "azurerm_storage_data_lake_gen2_filesystem" "this" {
   name               = "fs${var.data_lake_name}"
   storage_account_id = azurerm_storage_account.data_lake.id
 }
@@ -126,6 +126,10 @@ resource "azurerm_machine_learning_compute_instance" "example" {
   virtual_machine_size          = "STANDARD_DS11_V2"
   subnet_resource_id            = azurerm_subnet.aml.id
   description                   = "Azure ML to test while doing the AZ Data Science certification"
+  identity {
+    type = "SystemAssigned"
+
+  }
 }
 
 #######################################
