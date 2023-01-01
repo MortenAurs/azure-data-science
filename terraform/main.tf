@@ -87,10 +87,6 @@ resource "azurerm_storage_account" "data_lake" {
 resource "azurerm_storage_data_lake_gen2_filesystem" "example" {
   name               = "fs${var.data_lake_name}"
   storage_account_id = azurerm_storage_account.data_lake.id
-
-  properties = {
-    hello = "aGVsbG8="
-  }
 }
 
 resource "azurerm_container_registry" "this" {
