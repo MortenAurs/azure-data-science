@@ -17,6 +17,10 @@ variable "storage_account_name" {
   default = "stdsaml"
 }
 
+variable "data_lake_name" {
+  default = "dldsaml"
+}
+
 variable "container_registry_name" {
   default = "acrdsdp100"
 }
