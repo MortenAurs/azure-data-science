@@ -247,7 +247,7 @@ resource "azurerm_consumption_budget_resource_group" "this" {
   }
 
   notification {
-    enabled   = false
+    enabled   = true
     threshold = 100.0
     operator  = "GreaterThan"
 
