@@ -6,9 +6,9 @@
 # Storage Account with VNET binding and Private Endpoint for Blob and File
 
 resource "azurerm_storage_account" "aml_sa" {
-  name                     = var.storage_account_name
+  name                     = var.local.storage_account_name
   location                 = var.location
-  resource_group_name      = azurerm_resource_group.aml_rg.name
+  resource_group_name      = azurerm_resource_group.this.name
   account_tier             = "Standard"
   account_replication_type = "LRS"
 }
@@ -16,7 +16,7 @@ resource "azurerm_storage_account" "aml_sa" {
 # Virtual Network & Firewall configuration
 
 resource "azurerm_storage_account_network_rules" "firewall_rules" {
-  resource_group_name  = azurerm_resource_group.aml_rg.name
+  resource_group_name  = azurerm_resource_group.this.name
   storage_account_name = azurerm_storage_account.aml_sa.name
 
   default_action             = "Deny"
@@ -32,26 +32,26 @@ resource "azurerm_storage_account_network_rules" "firewall_rules" {
 
 resource "azurerm_private_dns_zone" "sa_zone_blob" {
   name                = "privatelink.blob.core.windows.net"
-  resource_group_name = azurerm_resource_group.aml_rg.name
+  resource_group_name = azurerm_resource_group.this.name
 }
 
 resource "azurerm_private_dns_zone" "sa_zone_file" {
   name                = "privatelink.file.core.windows.net"
-  resource_group_name = azurerm_resource_group.aml_rg.name
+  resource_group_name = azurerm_resource_group.this.name
 }
 
 # Linking of DNS zones to Virtual Network
 
 resource "azurerm_private_dns_zone_virtual_network_link" "sa_zone_blob_link" {
   name                  = "${random_string.postfix.result}_link_blob"
-  resource_group_name   = azurerm_resource_group.aml_rg.name
+  resource_group_name   = azurerm_resource_group.this.name
   private_dns_zone_name = azurerm_private_dns_zone.sa_zone_blob.name
   virtual_network_id    = azurerm_virtual_network.aml_vnet.id
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "sa_zone_file_link" {
   name                  = "${random_string.postfix.result}_link_file"
-  resource_group_name   = azurerm_resource_group.aml_rg.name
+  resource_group_name   = azurerm_resource_group.this.name
   private_dns_zone_name = azurerm_private_dns_zone.sa_zone_file.name
   virtual_network_id    = azurerm_virtual_network.aml_vnet.id
 }
@@ -59,13 +59,13 @@ resource "azurerm_private_dns_zone_virtual_network_link" "sa_zone_file_link" {
 # Private Endpoint configuration
 
 resource "azurerm_private_endpoint" "sa_pe_blob" {
-  name                = "${var.storage_account_name}-st-pe-blob"
+  name                = "${var.local.storage_account_name}-st-pe-blob"
   location            = azurerm_resource_group.aml_rg.location
-  resource_group_name = azurerm_resource_group.aml_rg.name
+  resource_group_name = azurerm_resource_group.this.name
   subnet_id           = azurerm_subnet.aml_subnet.id
 
   private_service_connection {
-    name                           = "${var.storage_account_name}-st-psc-blob"
+    name                           = "${var.local.storage_account_name}-st-psc-blob"
     private_connection_resource_id = azurerm_storage_account.aml_sa.id
     subresource_names              = ["blob"]
     is_manual_connection           = false
@@ -78,13 +78,13 @@ resource "azurerm_private_endpoint" "sa_pe_blob" {
 }
 
 resource "azurerm_private_endpoint" "sa_pe_file" {
-  name                = "${var.storage_account_name}-st-pe-file"
+  name                = "${var.local.storage_account_name}-st-pe-file"
   location            = azurerm_resource_group.aml_rg.location
-  resource_group_name = azurerm_resource_group.aml_rg.name
+  resource_group_name = azurerm_resource_group.this.name
   subnet_id           = azurerm_subnet.aml_subnet.id
 
   private_service_connection {
-    name                           = "${var.storage_account_name}-st-psc-file"
+    name                           = "${var.local.storage_account_name}-st-psc-file"
     private_connection_resource_id = azurerm_storage_account.aml_sa.id
     subresource_names              = ["file"]
     is_manual_connection           = false

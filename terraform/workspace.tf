@@ -1,5 +1,5 @@
 resource "azurerm_machine_learning_workspace" "this" {
-  name                          = var.machine_learning_workspace_name
+  name                          = var.local.machine_learning_workspace_name
   location                      = var.location
   resource_group_name           = azurerm_resource_group.this.name
   application_insights_id       = azurerm_application_insights.this.id
@@ -29,57 +29,43 @@ resource "azurerm_machine_learning_compute_instance" "moaur" {
 }
 
 resource "azurerm_private_endpoint" "amlw" {
-  name                          = "pe-${var.machine_learning_workspace_name}"
+  name                          = "${var.local.machine_learning_workspace_name}-pe"
   location                      = var.location
   resource_group_name           = azurerm_resource_group.this.name
   subnet_id                     = azurerm_subnet.aml.id
-  custom_network_interface_name = "nic-pe-${var.machine_learning_workspace_name}"
+  custom_network_interface_name = "${var.local.machine_learning_workspace_name}-nic-pe"
   private_service_connection {
-    name                           = "psc-${var.machine_learning_workspace_name}"
+    name                           = "${var.local.machine_learning_workspace_name}-psc"
     private_connection_resource_id = azurerm_machine_learning_workspace.this.id
     is_manual_connection           = false
     subresource_names              = ["amlworkspace"]
   }
 }
 
-# Create Compute Resources in AML
-
-resource "null_resource" "compute_resouces" {
-  provisioner "local-exec" {
-    command = "az ml computetarget create amlcompute --max-nodes 1 --min-nodes 0 --name cpu-cluster --vm-size Standard_DS3_v2 --idle-seconds-before-scaledown 600 --assign-identity [system] --vnet-name ${azurerm_subnet.compute_subnet.virtual_network_name} --subnet-name ${azurerm_subnet.compute_subnet.name} --vnet-resourcegroup-name ${azurerm_subnet.compute_subnet.resource_group_name} --resource-group ${azurerm_machine_learning_workspace.aml_ws.resource_group_name} --workspace-name ${azurerm_machine_learning_workspace.aml_ws.name}"
-  }
-
-  provisioner "local-exec" {
-    command = "az ml computetarget create computeinstance --name ci-${random_string.postfix.result}-test --vm-size Standard_DS3_v2 --vnet-name ${azurerm_subnet.compute_subnet.virtual_network_name} --subnet-name ${azurerm_subnet.compute_subnet.name} --vnet-resourcegroup-name ${azurerm_subnet.compute_subnet.resource_group_name} --resource-group ${azurerm_machine_learning_workspace.aml_ws.resource_group_name} --workspace-name ${azurerm_machine_learning_workspace.aml_ws.name}"
-  }
-
-  depends_on = [azurerm_machine_learning_workspace.aml_ws]
-}
-
 # DNS Zones
 
 resource "azurerm_private_dns_zone" "ws_zone_api" {
   name                = "privatelink.api.azureml.ms"
-  resource_group_name = azurerm_resource_group.aml_rg.name
+  resource_group_name = azurerm_resource_group.this.name
 }
 
 resource "azurerm_private_dns_zone" "ws_zone_notebooks" {
   name                = "privatelink.notebooks.azure.net"
-  resource_group_name = azurerm_resource_group.aml_rg.name
+  resource_group_name = azurerm_resource_group.this.name
 }
 
 # Linking of DNS zones to Virtual Network
 
 resource "azurerm_private_dns_zone_virtual_network_link" "ws_zone_api_link" {
-  name                  = "${random_string.postfix.result}_link_api"
-  resource_group_name   = azurerm_resource_group.aml_rg.name
+  name                  = "${azurerm_private_dns_zone.ws_zone_api.name}_link_api"
+  resource_group_name   = azurerm_resource_group.this.name
   private_dns_zone_name = azurerm_private_dns_zone.ws_zone_api.name
   virtual_network_id    = azurerm_virtual_network.aml_vnet.id
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "ws_zone_notebooks_link" {
-  name                  = "${random_string.postfix.result}_link_notebooks"
-  resource_group_name   = azurerm_resource_group.aml_rg.name
+  name                  = "${azurerm_private_dns_zone.ws_zone_notebooks.name}_link_notebooks"
+  resource_group_name   = azurerm_resource_group.this.name
   private_dns_zone_name = azurerm_private_dns_zone.ws_zone_notebooks.name
   virtual_network_id    = azurerm_virtual_network.aml_vnet.id
 }
@@ -87,13 +73,13 @@ resource "azurerm_private_dns_zone_virtual_network_link" "ws_zone_notebooks_link
 # Private Endpoint configuration
 
 resource "azurerm_private_endpoint" "ws_pe" {
-  name                = "${var.prefix}-ws-pe-${random_string.postfix.result}"
+  name                = "${var.local.machine_learning_workspace_name}-pe-${random_string.postfix.result}"
   location            = azurerm_resource_group.aml_rg.location
-  resource_group_name = azurerm_resource_group.aml_rg.name
+  resource_group_name = azurerm_resource_group.this.name
   subnet_id           = azurerm_subnet.aml_subnet.id
 
   private_service_connection {
-    name                           = "${var.prefix}-ws-psc-${random_string.postfix.result}"
+    name                           = "${var.local.machine_learning_workspace_name}-psc"
     private_connection_resource_id = azurerm_machine_learning_workspace.aml_ws.id
     subresource_names              = ["amlworkspace"]
     is_manual_connection           = false

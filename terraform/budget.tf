@@ -14,7 +14,7 @@ resource "azurerm_monitor_action_group" "owner" {
 }
 
 resource "azurerm_consumption_budget_resource_group" "this" {
-  name              = "resourceGroup forecast"
+  name              = "poc-ma-budget"
   resource_group_id = azurerm_resource_group.this.id
 
   amount     = 100

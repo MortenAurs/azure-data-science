@@ -1,6 +1,15 @@
 locals {
   base_name       = "azure-ml-poc"
   base_name_short = "azmlpocaml"
+
+  vm_name                         = "vm-${local.base_name}"
+  key_vault_name                  = "kv-${local.base_name}"
+  machine_learning_workspace_name = "mlw-${base_name}"
+  storage_account_name            = "st${local.base_name_short}"
+  application_insights_name       = "ai-${local.base_name}"
+  container_registry_name         = "acr${base_name_short}"
+  virtual_network_name            = "vnet-${base_name}"
+  subnet_name                     = "snet-${var.virtual_network_name}"
 }
 
 variable "resource_group_name" {
@@ -11,51 +20,11 @@ variable "location" {
   default = "northeurope"
 }
 
-variable "application_insights_name" {
-  default = "ai-${base_name}"
-}
-
-variable "vm_name" {
-  default = "vm-${base_name}"
-}
-variable "key_vault_name" {
-  default = "kv-${base_name}"
-}
-
-variable "storage_account_name" {
-  default = "st${base_name_short}"
-}
-
-variable "data_lake_name" {
-  default = "dl${base_name_short}"
-}
-
-variable "container_registry_name" {
-  default = "acr${base_name_short}"
-}
-
-variable "machine_learning_workspace_name" {
-  default = "mlw-${base_name}"
-}
-
 variable "machine_learning_compute_instance_name" {
   default = "MOAURDSCI"
-}
-
-variable "virtual_network_name" {
-  default = "vnet-${base_name}"
-}
-
-locals {
-  subnet_name = "snet-${var.virtual_network_name}"
 }
 
 variable "vm_username" {
   default = "moaur"
 }
 
-resource "random_string" "postfix" {
-  length  = 6
-  special = false
-  upper   = false
-}

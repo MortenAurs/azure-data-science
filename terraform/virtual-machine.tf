@@ -14,7 +14,7 @@ resource "random_password" "this" {
 resource "azurerm_network_interface" "vm_nic" {
   name                = "${var.vm_name}-nic"
   location            = var.location
-  resource_group_name = azurerm_resource_group.aml_rg.name
+  resource_group_name = azurerm_resource_group.this.name
 
   ip_configuration {
     name                          = "configuration"
@@ -27,7 +27,7 @@ resource "azurerm_network_interface" "vm_nic" {
 resource "azurerm_network_security_group" "vm_nsg" {
   name                = "${var.vm_name}-nsg"
   location            = var.location
-  resource_group_name = azurerm_resource_group.aml_rg.name
+  resource_group_name = azurerm_resource_group.this.name
 
   security_rule {
     name                       = "RDP"
@@ -50,7 +50,7 @@ resource "azurerm_network_interface_security_group_association" "vm_nsg_associat
 resource "azurerm_virtual_machine" "vm" {
   name                  = var.vm_name
   location              = var.location
-  resource_group_name   = azurerm_resource_group.aml_rg.name
+  resource_group_name   = azurerm_resource_group.this.name
   network_interface_ids = [azurerm_network_interface.vm_nic.id]
   vm_size               = "Standard_B1s"
 
