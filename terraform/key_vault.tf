@@ -5,7 +5,7 @@
 
 # Key Vault with VNET binding and Private Endpoint
 
-resource "azurerm_key_vault" "aml_kv" {
+resource "azurerm_key_vault" "this" {
   name                = "kv-${local.key_vault_name}"
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
@@ -46,7 +46,7 @@ resource "azurerm_private_endpoint" "kv_pe" {
 
   private_service_connection {
     name                           = "kv-psc-${local.key_vault_name}"
-    private_connection_resource_id = azurerm_key_vault.aml_kv.id
+    private_connection_resource_id = azurerm_key_vault.this.id
     subresource_names              = ["vault"]
     is_manual_connection           = false
   }

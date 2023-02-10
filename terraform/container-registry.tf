@@ -18,7 +18,7 @@ resource "azurerm_private_endpoint" "acr" {
   name                          = "pe-${local.container_registry_name}"
   location                      = var.location
   resource_group_name           = azurerm_resource_group.this.name
-  subnet_id                     = azurerm_subnet.aml.id
+  subnet_id                     = azurerm_subnet.aml_subnet.id
   custom_network_interface_name = "${local.container_registry_name}-nic-pe"
   private_service_connection {
     name                           = "${local.container_registry_name}-psc"

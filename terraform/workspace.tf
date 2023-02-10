@@ -4,7 +4,7 @@ resource "azurerm_machine_learning_workspace" "this" {
   resource_group_name           = azurerm_resource_group.this.name
   application_insights_id       = azurerm_application_insights.this.id
   key_vault_id                  = azurerm_key_vault.this.id
-  storage_account_id            = azurerm_storage_account.this.id
+  storage_account_id            = azurerm_storage_account.aml_st.id
   public_network_access_enabled = true
   container_registry_id         = azurerm_container_registry.this.id
   identity {
@@ -17,7 +17,7 @@ resource "azurerm_machine_learning_compute_instance" "moaur" {
   location                      = var.location
   machine_learning_workspace_id = azurerm_machine_learning_workspace.this.id
   virtual_machine_size          = "STANDARD_DS11_V2"
-  subnet_resource_id            = azurerm_subnet.aml.id
+  subnet_resource_id            = azurerm_subnet.aml_subnet.id
   description                   = "Azure ML to test while doing the AZ Data Science certification"
   identity {
     type = "SystemAssigned"
@@ -32,7 +32,7 @@ resource "azurerm_private_endpoint" "amlw" {
   name                          = "${local.machine_learning_workspace_name}-pe"
   location                      = var.location
   resource_group_name           = azurerm_resource_group.this.name
-  subnet_id                     = azurerm_subnet.aml.id
+  subnet_id                     = azurerm_subnet.aml_subnet.id
   custom_network_interface_name = "${local.machine_learning_workspace_name}-nic-pe"
   private_service_connection {
     name                           = "${local.machine_learning_workspace_name}-psc"
@@ -73,14 +73,14 @@ resource "azurerm_private_dns_zone_virtual_network_link" "ws_zone_notebooks_link
 # Private Endpoint configuration
 
 resource "azurerm_private_endpoint" "ws_pe" {
-  name                = "${local.machine_learning_workspace_name}-pe-${random_string.postfix.result}"
+  name                = "${local.machine_learning_workspace_name}-pe"
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
   subnet_id           = azurerm_subnet.aml_subnet.id
 
   private_service_connection {
     name                           = "${local.machine_learning_workspace_name}-psc"
-    private_connection_resource_id = azurerm_machine_learning_workspace.aml_ws.id
+    private_connection_resource_id = azurerm_machine_learning_workspace.this.id
     subresource_names              = ["amlworkspace"]
     is_manual_connection           = false
   }
