@@ -6,6 +6,7 @@ locals {
 variable "resource_group_name" {
   default = "rg-ma-poc"
 }
+
 variable "location" {
   default = "northeurope"
 }
