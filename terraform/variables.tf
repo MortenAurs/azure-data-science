@@ -41,10 +41,6 @@ locals {
   subnet_name = "snet-${var.virtual_network_name}"
 }
 
-variable "deploy_aks" {
-  default = false
-}
-
 variable "jumphost_username" {
   default = "moaur"
 }

@@ -104,7 +104,7 @@ resource "azurerm_private_endpoint" "ws_pe" {
     private_dns_zone_ids = [azurerm_private_dns_zone.ws_zone_api.id, azurerm_private_dns_zone.ws_zone_notebooks.id]
   }
 
-  # Add Private Link after we configured the workspace and attached AKS
-  depends_on = [azurerm_machine_learning_compute_instance.moaur, azurerm_kubernetes_cluster.aml_aks]
+  # Add Private Link after we configured the workspace 
+  depends_on = [azurerm_machine_learning_compute_instance.moaurs]
 }
 
