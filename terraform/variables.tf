@@ -4,12 +4,13 @@ locals {
 
   vm_name                         = "vm-${local.base_name}"
   key_vault_name                  = "kv-${local.base_name}"
-  machine_learning_workspace_name = "mlw-${base_name}"
-  storage_account_name            = "st${local.base_name_short}"
+  machine_learning_workspace_name = "mlw-${local.base_name}"
+  virtual_network_name            = "vnet-${local.base_name}"
+  subnet_name                     = "snet-${local.virtual_network_name}"
   application_insights_name       = "ai-${local.base_name}"
-  container_registry_name         = "acr${base_name_short}"
-  virtual_network_name            = "vnet-${base_name}"
-  subnet_name                     = "snet-${var.virtual_network_name}"
+  storage_account_name            = "st${local.base_name_short}"
+  container_registry_name         = "acr${local.base_name_short}"
+
 }
 
 variable "resource_group_name" {

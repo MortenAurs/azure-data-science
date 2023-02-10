@@ -12,7 +12,7 @@ resource "random_password" "this" {
 }
 
 resource "azurerm_network_interface" "vm_nic" {
-  name                = "${var.vm_name}-nic"
+  name                = "${local.vm_name}-nic"
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
 
@@ -25,7 +25,7 @@ resource "azurerm_network_interface" "vm_nic" {
 }
 
 resource "azurerm_network_security_group" "vm_nsg" {
-  name                = "${var.vm_name}-nsg"
+  name                = "${local.vm_name}-nsg"
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
 
@@ -48,7 +48,7 @@ resource "azurerm_network_interface_security_group_association" "vm_nsg_associat
 }
 
 resource "azurerm_virtual_machine" "vm" {
-  name                  = var.vm_name
+  name                  = local.vm_name
   location              = var.location
   resource_group_name   = azurerm_resource_group.this.name
   network_interface_ids = [azurerm_network_interface.vm_nic.id]
@@ -65,7 +65,7 @@ resource "azurerm_virtual_machine" "vm" {
   }
 
   os_profile {
-    computer_name  = var.vm_name
+    computer_name  = local.vm_name
     admin_username = var.vm_username
     admin_password = random_password.this.result
   }
@@ -80,7 +80,7 @@ resource "azurerm_virtual_machine" "vm" {
   }
 
   storage_os_disk {
-    name              = "${var.vm_name}-os"
+    name              = "${local.vm_name}-os"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "StandardSSD_LRS"

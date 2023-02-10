@@ -9,7 +9,7 @@ resource "azurerm_container_registry" "this" {
     default_action = "Deny"
     virtual_network {
       action    = "Allow"
-      subnet_id = azurerm_subnet.aml.id
+      subnet_id = azurerm_subnet.aml_subnet.id
     }
   }
 }

@@ -6,7 +6,7 @@
 # Storage Account with VNET binding and Private Endpoint for Blob and File
 
 resource "azurerm_storage_account" "aml_sa" {
-  name                     = var.local.storage_account_name
+  name                     = local.storage_account_name
   location                 = var.location
   resource_group_name      = azurerm_resource_group.this.name
   account_tier             = "Standard"
@@ -59,13 +59,13 @@ resource "azurerm_private_dns_zone_virtual_network_link" "sa_zone_file_link" {
 # Private Endpoint configuration
 
 resource "azurerm_private_endpoint" "sa_pe_blob" {
-  name                = "${var.local.storage_account_name}-st-pe-blob"
-  location            = azurerm_resource_group.aml_rg.location
+  name                = "${local.storage_account_name}-st-pe-blob"
+  location            = var.location
   resource_group_name = azurerm_resource_group.this.name
   subnet_id           = azurerm_subnet.aml_subnet.id
 
   private_service_connection {
-    name                           = "${var.local.storage_account_name}-st-psc-blob"
+    name                           = "${local.storage_account_name}-st-psc-blob"
     private_connection_resource_id = azurerm_storage_account.aml_sa.id
     subresource_names              = ["blob"]
     is_manual_connection           = false
@@ -78,13 +78,13 @@ resource "azurerm_private_endpoint" "sa_pe_blob" {
 }
 
 resource "azurerm_private_endpoint" "sa_pe_file" {
-  name                = "${var.local.storage_account_name}-st-pe-file"
-  location            = azurerm_resource_group.aml_rg.location
+  name                = "${local.storage_account_name}-st-pe-file"
+  location            = var.location
   resource_group_name = azurerm_resource_group.this.name
   subnet_id           = azurerm_subnet.aml_subnet.id
 
   private_service_connection {
-    name                           = "${var.local.storage_account_name}-st-psc-file"
+    name                           = "${local.storage_account_name}-st-psc-file"
     private_connection_resource_id = azurerm_storage_account.aml_sa.id
     subresource_names              = ["file"]
     is_manual_connection           = false

@@ -1,5 +1,5 @@
 resource "azurerm_machine_learning_workspace" "this" {
-  name                          = var.local.machine_learning_workspace_name
+  name                          = local.machine_learning_workspace_name
   location                      = var.location
   resource_group_name           = azurerm_resource_group.this.name
   application_insights_id       = azurerm_application_insights.this.id
@@ -29,13 +29,13 @@ resource "azurerm_machine_learning_compute_instance" "moaur" {
 }
 
 resource "azurerm_private_endpoint" "amlw" {
-  name                          = "${var.local.machine_learning_workspace_name}-pe"
+  name                          = "${local.machine_learning_workspace_name}-pe"
   location                      = var.location
   resource_group_name           = azurerm_resource_group.this.name
   subnet_id                     = azurerm_subnet.aml.id
-  custom_network_interface_name = "${var.local.machine_learning_workspace_name}-nic-pe"
+  custom_network_interface_name = "${local.machine_learning_workspace_name}-nic-pe"
   private_service_connection {
-    name                           = "${var.local.machine_learning_workspace_name}-psc"
+    name                           = "${local.machine_learning_workspace_name}-psc"
     private_connection_resource_id = azurerm_machine_learning_workspace.this.id
     is_manual_connection           = false
     subresource_names              = ["amlworkspace"]
@@ -73,13 +73,13 @@ resource "azurerm_private_dns_zone_virtual_network_link" "ws_zone_notebooks_link
 # Private Endpoint configuration
 
 resource "azurerm_private_endpoint" "ws_pe" {
-  name                = "${var.local.machine_learning_workspace_name}-pe-${random_string.postfix.result}"
-  location            = azurerm_resource_group.aml_rg.location
+  name                = "${local.machine_learning_workspace_name}-pe-${random_string.postfix.result}"
+  location            = var.location
   resource_group_name = azurerm_resource_group.this.name
   subnet_id           = azurerm_subnet.aml_subnet.id
 
   private_service_connection {
-    name                           = "${var.local.machine_learning_workspace_name}-psc"
+    name                           = "${local.machine_learning_workspace_name}-psc"
     private_connection_resource_id = azurerm_machine_learning_workspace.aml_ws.id
     subresource_names              = ["amlworkspace"]
     is_manual_connection           = false

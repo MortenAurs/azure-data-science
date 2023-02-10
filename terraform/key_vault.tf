@@ -40,7 +40,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "kv_zone_link" {
 
 resource "azurerm_private_endpoint" "kv_pe" {
   name                = "kv-pe-${local.key_vault_name}"
-  location            = azurerm_resource_group.aml_rg.location
+  location            = var.location
   resource_group_name = azurerm_resource_group.this.name
   subnet_id           = azurerm_subnet.aml_subnet.id
 
