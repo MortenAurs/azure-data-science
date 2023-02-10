@@ -12,7 +12,7 @@ resource "azurerm_machine_learning_workspace" "this" {
   }
 }
 
-resource "azurerm_machine_learning_compute_instance" "example" {
+resource "azurerm_machine_learning_compute_instance" "moaur" {
   name                          = var.machine_learning_compute_instance_name
   location                      = var.location
   machine_learning_workspace_id = azurerm_machine_learning_workspace.this.id
@@ -105,6 +105,6 @@ resource "azurerm_private_endpoint" "ws_pe" {
   }
 
   # Add Private Link after we configured the workspace 
-  depends_on = [azurerm_machine_learning_compute_instance.moaurs]
+  depends_on = [azurerm_machine_learning_compute_instance.moaur]
 }
 

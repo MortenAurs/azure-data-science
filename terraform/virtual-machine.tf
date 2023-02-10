@@ -10,7 +10,6 @@ resource "random_password" "this" {
   length  = 16
   special = true
 }
-#random_password.this.result
 
 resource "azurerm_network_interface" "vm_nic" {
   name                = "${var.vm_name}-nic"
@@ -68,7 +67,7 @@ resource "azurerm_virtual_machine" "vm" {
   os_profile {
     computer_name  = var.vm_name
     admin_username = var.vm_username
-    admin_password = var.vm_password
+    admin_password = random_password.this.result
   }
 
   os_profile_windows_config {
@@ -81,7 +80,7 @@ resource "azurerm_virtual_machine" "vm" {
   }
 
   storage_os_disk {
-    name              = "vm-osdisk"
+    name              = "${var.vm_name}-os"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "StandardSSD_LRS"
@@ -93,7 +92,7 @@ resource "azurerm_dev_test_global_vm_shutdown_schedule" "vm_schedule" {
   location           = var.location
   enabled            = true
 
-  daily_recurrence_time = "2000"
+  daily_recurrence_time = "2300"
   timezone              = "W. Europe Standard Time"
 
   notification_settings {
