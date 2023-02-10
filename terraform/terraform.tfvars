@@ -11,4 +11,4 @@ location="West Europe"
 workspace_display_name="aml-terraform-demo"
 
 # Jumpbox login credentials
-jumphost_username="moaur"
+vm_username="moaur"
