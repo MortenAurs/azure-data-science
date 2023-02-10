@@ -1,7 +1,7 @@
 resource "azurerm_container_registry" "this" {
   name                = var.container_registry_name
   resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
+  location            = var.location
   sku                 = "Premium"
   admin_enabled       = false
 
@@ -16,7 +16,7 @@ resource "azurerm_container_registry" "this" {
 
 resource "azurerm_private_endpoint" "acr" {
   name                          = "pe-${var.container_registry_name}"
-  location                      = azurerm_resource_group.this.location
+  location                      = var.location
   resource_group_name           = azurerm_resource_group.this.name
   subnet_id                     = azurerm_subnet.aml.id
   custom_network_interface_name = "nic-pe-${var.container_registry_name}"

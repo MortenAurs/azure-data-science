@@ -1,6 +1,6 @@
 resource "azurerm_machine_learning_workspace" "this" {
   name                          = var.machine_learning_workspace_name
-  location                      = azurerm_resource_group.this.location
+  location                      = var.location
   resource_group_name           = azurerm_resource_group.this.name
   application_insights_id       = azurerm_application_insights.this.id
   key_vault_id                  = azurerm_key_vault.this.id
@@ -14,7 +14,7 @@ resource "azurerm_machine_learning_workspace" "this" {
 
 resource "azurerm_machine_learning_compute_instance" "example" {
   name                          = var.machine_learning_compute_instance_name
-  location                      = azurerm_resource_group.this.location
+  location                      = var.location
   machine_learning_workspace_id = azurerm_machine_learning_workspace.this.id
   virtual_machine_size          = "STANDARD_DS11_V2"
   subnet_resource_id            = azurerm_subnet.aml.id
@@ -30,7 +30,7 @@ resource "azurerm_machine_learning_compute_instance" "example" {
 
 resource "azurerm_private_endpoint" "amlw" {
   name                          = "pe-${var.machine_learning_workspace_name}"
-  location                      = azurerm_resource_group.this.location
+  location                      = var.location
   resource_group_name           = azurerm_resource_group.this.name
   subnet_id                     = azurerm_subnet.aml.id
   custom_network_interface_name = "nic-pe-${var.machine_learning_workspace_name}"

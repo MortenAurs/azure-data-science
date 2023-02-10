@@ -1,7 +1,7 @@
 resource "azurerm_virtual_network" "this" {
   name                = var.virtual_network_name
   address_space       = ["10.10.0.0/22"]
-  location            = azurerm_resource_group.this.location
+  location            = var.location
   resource_group_name = azurerm_resource_group.this.name
 }
 
