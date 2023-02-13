@@ -46,7 +46,7 @@ resource "azurerm_private_endpoint" "kv_pe" {
   custom_network_interface_name = "${local.key_vault_name}-pe-nic"
 
   private_service_connection {
-    name                           = "${local.key_vault_name}-kv-psc-"
+    name                           = "${local.key_vault_name}-kv-psc"
     private_connection_resource_id = azurerm_key_vault.this.id
     subresource_names              = ["vault"]
     is_manual_connection           = false
