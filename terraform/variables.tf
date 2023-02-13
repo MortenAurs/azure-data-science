@@ -22,7 +22,7 @@ variable "location" {
 }
 
 variable "machine_learning_compute_instance_name" {
-  default = "MOAURDSCI"
+  default = "MOAURSTDCI"
 }
 
 variable "vm_username" {

@@ -19,7 +19,7 @@ resource "azurerm_storage_account_network_rules" "firewall_rules" {
   storage_account_id = azurerm_storage_account.aml_st.id
 
   default_action             = "Deny"
-  ip_rules                   = []
+  ip_rules                   = ["8.29.230.8"]
   virtual_network_subnet_ids = [azurerm_subnet.aml_subnet.id, azurerm_subnet.compute_subnet.id]
   bypass                     = ["AzureServices"]
 

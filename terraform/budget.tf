@@ -33,6 +33,9 @@ resource "azurerm_consumption_budget_resource_group" "this" {
     contact_groups = [
       azurerm_monitor_action_group.owner.id,
     ]
+    contact_emails = [
+      "morten.aursland@gmail.com"
+    ]
   }
 
   notification {

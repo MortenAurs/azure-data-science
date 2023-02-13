@@ -23,26 +23,12 @@ resource "azurerm_machine_learning_compute_instance" "moaur" {
     type = "SystemAssigned"
   }
   assign_to_user {
-    object_id = "4afbe840-6f29-4b44-ae68-f49c2eb6af62"
-    tenant_id = "8f81da33-edad-4282-a064-189a62bcaf2b"
+    object_id = "6e2aa9e5-8c05-4c2a-b166-157b32f6074c"
+    tenant_id = "c317fa72-b393-44ea-a87c-ea272e8d963d"
   }
   depends_on = [
     azurerm_machine_learning_workspace.this
   ]
-}
-
-resource "azurerm_private_endpoint" "amlw" {
-  name                          = "${local.machine_learning_workspace_name}-pe"
-  location                      = var.location
-  resource_group_name           = azurerm_resource_group.this.name
-  subnet_id                     = azurerm_subnet.aml_subnet.id
-  custom_network_interface_name = "${local.machine_learning_workspace_name}-nic-pe"
-  private_service_connection {
-    name                           = "${local.machine_learning_workspace_name}-psc"
-    private_connection_resource_id = azurerm_machine_learning_workspace.this.id
-    is_manual_connection           = false
-    subresource_names              = ["amlworkspace"]
-  }
 }
 
 # DNS Zones
@@ -76,10 +62,11 @@ resource "azurerm_private_dns_zone_virtual_network_link" "ws_zone_notebooks_link
 # Private Endpoint configuration
 
 resource "azurerm_private_endpoint" "ws_pe" {
-  name                = "${local.machine_learning_workspace_name}-pe"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.this.name
-  subnet_id           = azurerm_subnet.aml_subnet.id
+  name                          = "${local.machine_learning_workspace_name}-pe"
+  location                      = var.location
+  resource_group_name           = azurerm_resource_group.this.name
+  subnet_id                     = azurerm_subnet.aml_subnet.id
+  custom_network_interface_name = "${local.machine_learning_workspace_name}-pe-nic"
 
   private_service_connection {
     name                           = "${local.machine_learning_workspace_name}-psc"
