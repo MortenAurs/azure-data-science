@@ -17,16 +17,16 @@ resource "azurerm_consumption_budget_resource_group" "this" {
   name              = "poc-ma-budget"
   resource_group_id = azurerm_resource_group.this.id
 
-  amount     = 100
+  amount     = 400
   time_grain = "Monthly"
 
   time_period {
-    start_date = "2022-12-01T00:00:00Z"
+    start_date = "2023-02-01T00:00:00Z"
   }
 
   notification {
     enabled        = true
-    threshold      = 90.0
+    threshold      = 80.0
     operator       = "EqualTo"
     threshold_type = "Forecasted"
 

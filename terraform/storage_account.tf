@@ -42,14 +42,14 @@ resource "azurerm_private_dns_zone" "sa_zone_file" {
 # Linking of DNS zones to Virtual Network
 
 resource "azurerm_private_dns_zone_virtual_network_link" "sa_zone_blob_link" {
-  name                  = "${azurerm_private_dns_zone.sa_zone_blob}_link_blob"
+  name                  = "${azurerm_private_dns_zone.sa_zone_blob.name}_link_blob"
   resource_group_name   = azurerm_resource_group.this.name
   private_dns_zone_name = azurerm_private_dns_zone.sa_zone_blob.name
   virtual_network_id    = azurerm_virtual_network.aml_vnet.id
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "sa_zone_file_link" {
-  name                  = "${azurerm_private_dns_zone.sa_zone_file}_link_file"
+  name                  = "${azurerm_private_dns_zone.sa_zone_file.name}_link_file"
   resource_group_name   = azurerm_resource_group.this.name
   private_dns_zone_name = azurerm_private_dns_zone.sa_zone_file.name
   virtual_network_id    = azurerm_virtual_network.aml_vnet.id
@@ -58,10 +58,11 @@ resource "azurerm_private_dns_zone_virtual_network_link" "sa_zone_file_link" {
 # Private Endpoint configuration
 
 resource "azurerm_private_endpoint" "sa_pe_blob" {
-  name                = "${local.storage_account_name}-st-pe-blob"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.this.name
-  subnet_id           = azurerm_subnet.aml_subnet.id
+  name                          = "${local.storage_account_name}-st-pe-blob"
+  location                      = var.location
+  resource_group_name           = azurerm_resource_group.this.name
+  subnet_id                     = azurerm_subnet.aml_subnet.id
+  custom_network_interface_name = "${local.storage_account_name}-st-pe-blob-nic"
 
   private_service_connection {
     name                           = "${local.storage_account_name}-st-psc-blob"
@@ -77,10 +78,11 @@ resource "azurerm_private_endpoint" "sa_pe_blob" {
 }
 
 resource "azurerm_private_endpoint" "sa_pe_file" {
-  name                = "${local.storage_account_name}-st-pe-file"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.this.name
-  subnet_id           = azurerm_subnet.aml_subnet.id
+  name                          = "${local.storage_account_name}-st-pe-file"
+  location                      = var.location
+  resource_group_name           = azurerm_resource_group.this.name
+  subnet_id                     = azurerm_subnet.aml_subnet.id
+  custom_network_interface_name = "${local.storage_account_name}-st-pe-file-nic"
 
   private_service_connection {
     name                           = "${local.storage_account_name}-st-psc-file"

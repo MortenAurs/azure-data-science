@@ -26,6 +26,9 @@ resource "azurerm_machine_learning_compute_instance" "moaur" {
     object_id = "4afbe840-6f29-4b44-ae68-f49c2eb6af62"
     tenant_id = "8f81da33-edad-4282-a064-189a62bcaf2b"
   }
+  depends_on = [
+    azurerm_machine_learning_workspace.this
+  ]
 }
 
 resource "azurerm_private_endpoint" "amlw" {

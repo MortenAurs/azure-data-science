@@ -39,13 +39,14 @@ resource "azurerm_private_dns_zone_virtual_network_link" "kv_zone_link" {
 # Private Endpoint configuration
 
 resource "azurerm_private_endpoint" "kv_pe" {
-  name                = "kv-pe-${local.key_vault_name}"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.this.name
-  subnet_id           = azurerm_subnet.aml_subnet.id
+  name                          = "${local.key_vault_name}-pe"
+  location                      = var.location
+  resource_group_name           = azurerm_resource_group.this.name
+  subnet_id                     = azurerm_subnet.aml_subnet.id
+  custom_network_interface_name = "${local.key_vault_name}-pe-nic"
 
   private_service_connection {
-    name                           = "kv-psc-${local.key_vault_name}"
+    name                           = "${local.key_vault_name}-kv-psc-"
     private_connection_resource_id = azurerm_key_vault.this.id
     subresource_names              = ["vault"]
     is_manual_connection           = false
