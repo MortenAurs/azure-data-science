@@ -1,60 +1,31 @@
-variable "resource_group_name" {
-  default = "rg-data-science"
+locals {
+  base_name       = "azure-ml-poc"
+  base_name_short = "azmlpocaml"
+
+  vm_name                         = "vm-${local.base_name}"
+  key_vault_name                  = "kv-${local.base_name}"
+  machine_learning_workspace_name = "mlw-${local.base_name}"
+  virtual_network_name            = "vnet-${local.base_name}"
+  subnet_name                     = "snet-${local.virtual_network_name}"
+  application_insights_name       = "ai-${local.base_name}"
+  storage_account_name            = "st${local.base_name_short}"
+  container_registry_name         = "acr${local.base_name_short}"
+
 }
+
+variable "resource_group_name" {
+  default = "rg-ma-poc"
+}
+
 variable "location" {
   default = "northeurope"
 }
 
-variable "application_insights_name" {
-  default = "ai-data-science"
-}
-
-variable "key_vault_name" {
-  default = "kv-data-science-az"
-}
-
-variable "storage_account_name" {
-  default = "stdsaml"
-}
-
-variable "data_lake_name" {
-  default = "dldsaml"
-}
-
-variable "container_registry_name" {
-  default = "acrdsdp100"
-}
-
-variable "machine_learning_workspace_name" {
-  default = "mlw-data-science"
-}
-
 variable "machine_learning_compute_instance_name" {
-  default = "MOAURDSCI"
+  default = "MOAURSTDCI"
 }
 
-variable "virtual_network_name" {
-  default = "vnet-data-science"
-}
-
-locals {
-  subnet_name = "snet-${var.virtual_network_name}"
-}
-
-variable "deploy_aks" {
-  default = false
-}
-
-variable "jumphost_username" {
+variable "vm_username" {
   default = "moaur"
 }
 
-resource "random_string" "postfix" {
-  length  = 6
-  special = false
-  upper   = false
-}
-
-variable "location" {
-  default = "North Europe"
-}

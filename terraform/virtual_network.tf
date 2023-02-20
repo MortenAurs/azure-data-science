@@ -1,14 +1,39 @@
-resource "azurerm_virtual_network" "this" {
-  name                = var.virtual_network_name
-  address_space       = ["10.10.0.0/22"]
+# Copyright (c) 2021 Microsoft
+# 
+# This software is released under the MIT License.
+# https://opensource.org/licenses/MIT
+
+# Virtual Network definition
+
+resource "azurerm_virtual_network" "aml_vnet" {
+  name                = "${local.virtual_network_name}-vnet"
+  address_space       = ["10.0.0.0/16"]
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
 }
 
-resource "azurerm_subnet" "aml" {
-  name                 = local.subnet_name
+resource "azurerm_subnet" "aml_subnet" {
+  name                                      = "${local.virtual_network_name}-aml-subnet"
+  resource_group_name                       = azurerm_resource_group.this.name
+  virtual_network_name                      = azurerm_virtual_network.aml_vnet.name
+  address_prefixes                          = ["10.0.1.0/24"]
+  service_endpoints                         = ["Microsoft.ContainerRegistry", "Microsoft.KeyVault", "Microsoft.Storage"]
+  private_endpoint_network_policies_enabled = true
+}
+
+resource "azurerm_subnet" "compute_subnet" {
+  name                                          = "${local.virtual_network_name}-compute-subnet"
+  resource_group_name                           = azurerm_resource_group.this.name
+  virtual_network_name                          = azurerm_virtual_network.aml_vnet.name
+  address_prefixes                              = ["10.0.2.0/24"]
+  service_endpoints                             = ["Microsoft.ContainerRegistry", "Microsoft.KeyVault", "Microsoft.Storage"]
+  private_link_service_network_policies_enabled = false
+  private_endpoint_network_policies_enabled     = false
+}
+
+resource "azurerm_subnet" "bastion_subnet" {
+  name                 = "AzureBastionSubnet"
   resource_group_name  = azurerm_resource_group.this.name
-  virtual_network_name = azurerm_virtual_network.this.name
-  address_prefixes     = ["10.10.0.0/24"]
-  service_endpoints    = ["Microsoft.Storage", "Microsoft.ContainerRegistry"]
+  virtual_network_name = azurerm_virtual_network.aml_vnet.name
+  address_prefixes     = ["10.0.10.0/27"]
 }

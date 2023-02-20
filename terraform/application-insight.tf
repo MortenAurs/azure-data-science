@@ -1,5 +1,5 @@
 resource "azurerm_application_insights" "this" {
-  name                = var.application_insights_name
+  name                = local.application_insights_name
   location            = var.location
   resource_group_name = azurerm_resource_group.this.name
   application_type    = "web"
