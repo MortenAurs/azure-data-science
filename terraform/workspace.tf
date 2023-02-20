@@ -31,6 +31,31 @@ resource "azurerm_machine_learning_compute_instance" "moaur" {
   ]
 }
 
+resource "azurerm_machine_learning_compute_cluster" "default" {
+  name                          = "default-cluster"
+  location                      = var.location
+  vm_priority                   = "LowPriority"
+  vm_size                       = "STANDARD_DS2_V2"
+  machine_learning_workspace_id = azurerm_machine_learning_workspace.this.id
+  subnet_resource_id            = azurerm_subnet.aml_subnet.id
+
+  scale_settings {
+    min_node_count                       = 0
+    max_node_count                       = 2
+    scale_down_nodes_after_idle_duration = "PT120S" # 2 minutes
+  }
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      tags,
+    ]
+  }
+}
+
 # DNS Zones
 
 resource "azurerm_private_dns_zone" "ws_zone_api" {
